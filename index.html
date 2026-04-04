@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR Monitoring | SCM Konawe – MPP 970</title>
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AdminLTE 3 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/css/adminlte.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap4-theme/1.0.0/select2-bootstrap4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css">
+
+  <style>
+    :root {
+      --primary: #007bff;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger:  #dc3545;
+      --info:    #17a2b8;
+      --purple:  #6f42c1;
+    }
+
+    body { font-size: .875rem; }
+
+    /* SIDEBAR brand */
+    .brand-link .brand-text { font-weight: 700; font-size: 1rem; }
+
+    /* FILTER BAR */
+    .filter-bar {
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: .35rem;
+      padding: 14px 18px 10px;
+      margin-bottom: 18px;
+    }
+    .filter-bar .filter-title {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #6c757d;
+      margin-bottom: 10px;
+    }
+    .filter-bar .form-group { margin-bottom: 8px; }
+    .filter-bar label { font-size: .75rem; font-weight: 600; margin-bottom: 3px; color: #495057; }
+
+    /* STAT CARD override */
+    .small-box { border-radius: .5rem; }
+    .small-box .inner h3 { font-size: 2.4rem; }
+
+    /* INFO BOX */
+    .info-box { border-radius: .5rem; }
+
+    /* PROGRESS BARS */
+    .progress-sm { height: 6px; }
+
+    /* BADGE pill */
+    .badge-pill-sm { font-size: .68rem; padding: .2em .55em; border-radius: 10px; }
+
+    /* Pipeline cards */
+    .pipeline-col .card { border-left: 4px solid; margin-bottom: 10px; }
+    .pipeline-col .card-pipeline-compro  { border-color: var(--purple); }
+    .pipeline-col .card-pipeline-onboard { border-color: var(--success); }
+    .pipeline-col .card-pipeline-failed  { border-color: var(--danger); }
+
+    /* Active filter badge */
+    .active-filters .badge { margin-right: 4px; margin-bottom: 4px; cursor: pointer; font-size: .72rem; }
+
+    /* Chart container */
+    .chart-wrap { position: relative; height: 220px; }
+
+    /* Summary number pulse */
+    @keyframes countUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .small-box .inner h3 { animation: countUp .4s ease; }
+
+    /* Table striped hover */
+    #rekrutmenTable th { font-size: .72rem; white-space: nowrap; }
+    #rekrutmenTable td { font-size: .78rem; vertical-align: middle; }
+
+    /* Dark sidebar items */
+    .nav-sidebar .nav-item > .nav-link { font-size: .82rem; }
+
+    /* Color dot */
+    .clr-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+
+    /* Kanban header */
+    .kanban-header { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 6px 12px; border-radius: .3rem; margin-bottom: 10px; }
+
+    .section-divider { border-top: 2px solid #007bff33; margin: 20px 0 16px; }
+    .section-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #007bff; background: #e7f0ff; padding: 3px 10px; border-radius: 3px; display: inline-block; margin-bottom: 12px; }
+
+    .card-header-sm { padding: .5rem .9rem; }
+    .card-header-sm .card-title { font-size: .82rem; font-weight: 700; }
+
+    /* SLA indicator */
+    .sla-ok   { color: var(--success); font-weight: 600; }
+    .sla-warn { color: var(--warning); font-weight: 600; }
+    .sla-over { color: var(--danger);  font-weight: 600; }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .chart-wrap { height: 160px; }
+      .filter-bar .col-md-2, .filter-bar .col-md-3 { margin-bottom: 6px; }
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- ======= NAVBAR ======= -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light border-bottom">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link font-weight-bold text-primary">
+          <i class="fas fa-hard-hat mr-1"></i> SCM Konawe — HR Monitoring
+        </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <span class="nav-link">
+          <span class="badge badge-success badge-pill">
+            <i class="fas fa-circle mr-1" style="font-size:.5rem"></i> Live Data
+          </span>
+        </span>
+      </li>
+      <li class="nav-item">
+        <span class="nav-link text-muted" style="font-size:.78rem">
+          <i class="far fa-calendar-alt mr-1"></i> MPP-970 | Site: Konawe | 2024–2025
+        </span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="resetFilters()">
+          <i class="fas fa-undo-alt text-warning" title="Reset Semua Filter"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ======= SIDEBAR ======= -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <span class="brand-image bg-warning d-flex align-items-center justify-content-center" style="width:33px;height:33px;border-radius:5px;font-size:1.1rem">⛏️</span>
+      <span class="brand-text ml-2">SCM HR Dashboard</span>
+    </a>
+    <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <div class="img-circle bg-primary d-flex align-items-center justify-content-center" style="width:34px;height:34px;border-radius:50%;font-size:.9rem;color:#fff">
+            <i class="fas fa-user-tie"></i>
+          </div>
+        </div>
+        <div class="info">
+          <a href="#" class="d-block text-white" style="font-size:.82rem">Admin HRGA</a>
+          <small class="text-light" style="font-size:.7rem;opacity:.6">PT Sulawesi Cahaya Mineral</small>
+        </div>
+      </div>
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-compact" data-widget="treeview" role="menu">
+          <li class="nav-header">DASHBOARD</li>
+          <li class="nav-item">
+            <a href="#" onclick="showSection('overview')" class="nav-link active" id="menu-overview">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Overview</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="showSection('rekrutmen')" class="nav-link" id="menu-rekrutmen">
+              <i class="nav-icon fas fa-search"></i>
+              <p>Monitoring Rekrutmen</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="showSection('karyawan')" class="nav-link" id="menu-karyawan">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Data Karyawan</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="showSection('mpp')" class="nav-link" id="menu-mpp">
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>MPP Planning</p>
+            </a>
+          </li>
+          <li class="nav-header">KETERANGAN</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <span class="clr-dot" style="background:var(--success)"></span><span style="font-size:.78rem">On Board</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <span class="clr-dot" style="background:var(--purple)"></span><span style="font-size:.78rem">Compro/Pipeline</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <span class="clr-dot" style="background:var(--danger)"></span><span style="font-size:.78rem">Failed - Interview</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ======= CONTENT WRAPPER ======= -->
+  <div class="content-wrapper">
+
+    <!-- CONTENT HEADER -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-1">
+          <div class="col-sm-6">
+            <h1 class="m-0" id="pageTitle" style="font-size:1.3rem">
+              <i class="fas fa-tachometer-alt mr-2 text-primary"></i>Overview Dashboard
+            </h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">SCM</a></li>
+              <li class="breadcrumb-item active" id="breadcrumbActive">Overview</li>
+            </ol>
+          </div>
+        </div>
+        <!-- Active filters display -->
+        <div class="active-filters" id="activeFiltersBar" style="display:none">
+          <small class="text-muted mr-1">Filter aktif:</small>
+          <span id="activeFilterBadges"></span>
+          <a href="#" onclick="resetFilters()" class="badge badge-danger badge-pill ml-1">
+            <i class="fas fa-times mr-1"></i>Reset Semua
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== MAIN CONTENT =================== -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- ======== GLOBAL FILTER BAR ======== -->
+        <div class="filter-bar" id="globalFilterBar">
+          <div class="filter-title"><i class="fas fa-filter mr-1"></i> Filter Data Rekrutmen</div>
+          <div class="row">
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Tahun</label>
+                <select id="fYear" class="form-control form-control-sm select2bs4" multiple style="width:100%">
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Bulan</label>
+                <select id="fMonth" class="form-control form-control-sm select2bs4" multiple style="width:100%">
+                  <option>January</option><option>March</option><option>April</option>
+                  <option>May</option><option>June</option><option>July</option>
+                  <option>August</option><option>September</option><option>October</option><option>November</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Progress</label>
+                <select id="fProgress" class="form-control form-control-sm select2bs4" multiple style="width:100%">
+                  <option>Compro</option>
+                  <option>On Board</option>
+                  <option>Failed - Interview</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Level</label>
+                <select id="fLevel" class="form-control form-control-sm select2bs4" multiple style="width:100%">
+                  <option>Non-Staff</option>
+                  <option>Officer</option>
+                  <option>Supervisor</option>
+                  <option>Assistant Manager</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Divisi</label>
+                <select id="fDivisi" class="form-control form-control-sm select2bs4" style="width:100%">
+                  <option value="">-- Semua --</option>
+                  <option>Strategic Project &amp; Infrastructure</option>
+                  <option>General Facility &amp; Maintenance</option>
+                  <option>OHS &amp; Assets Protection</option>
+                  <option>Operation</option>
+                  <option>Community Affairs</option>
+                  <option>Mine Geology &amp; QA</option>
+                  <option>Commercial &amp; IT</option>
+                  <option>Mine Engineering</option>
+                  <option>Compliance &amp; Environmental</option>
+                  <option>Exploration &amp; Resources Development</option>
+                  <option>HRGA Operation</option>
+                  <option>Research &amp; Development</option>
+                  <option>Ore Haulage</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-6">
+              <div class="form-group">
+                <label>Priority</label>
+                <select id="fPriority" class="form-control form-control-sm select2bs4" style="width:100%">
+                  <option value="">-- Semua --</option>
+                  <option>P1</option><option>P2</option><option>P3</option><option>NP</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-6">
+              <div class="form-group">
+                <label>Sumber Rekrutmen</label>
+                <select id="fSourch" class="form-control form-control-sm select2bs4" style="width:100%">
+                  <option value="">-- Semua --</option>
+                  <option>Referral</option><option>BSI</option><option>LinkedIn</option><option>PUS</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="form-group">
+                <label>Gender</label>
+                <select id="fGender" class="form-control form-control-sm select2bs4" style="width:100%">
+                  <option value="">-- Semua --</option>
+                  <option>Male</option><option>Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+              <div class="form-group">
+                <label>Cari Nama / Posisi</label>
+                <input type="text" id="fSearch" class="form-control form-control-sm" placeholder="Ketik nama atau posisi...">
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-12 d-flex align-items-end">
+              <div class="form-group w-100">
+                <button onclick="applyFilters()" class="btn btn-primary btn-sm btn-block">
+                  <i class="fas fa-search mr-1"></i>Terapkan
+                </button>
+                <button onclick="resetFilters()" class="btn btn-default btn-sm btn-block mt-1">
+                  <i class="fas fa-undo mr-1"></i>Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================== SECTION: OVERVIEW =================== -->
+        <div id="section-overview">
+
+          <!-- KPI CARDS ROW 1 -->
+          <div class="row">
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-primary">
+                <div class="inner">
+                  <h3 id="kpi-total">668</h3>
+                  <p>Total Karyawan Aktif</p>
+                </div>
+                <div class="icon"><i class="fas fa-users"></i></div>
+                <a href="#" onclick="showSection('karyawan')" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>519</h3>
+                  <p>Karyawan Staff (OL)</p>
+                </div>
+                <div class="icon"><i class="fas fa-user-tie"></i></div>
+                <a href="#" onclick="showSection('karyawan')" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3>149</h3>
+                  <p>Non-Staff (OL)</p>
+                </div>
+                <div class="icon"><i class="fas fa-hard-hat"></i></div>
+                <a href="#" onclick="showSection('karyawan')" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>540</h3>
+                  <p>Posisi MPP 2025</p>
+                </div>
+                <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+                <a href="#" onclick="showSection('mpp')" class="small-box-footer">Lihat MPP <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI CARDS ROW 2 (Rekrutmen) -->
+          <div class="row">
+            <div class="col-lg-3 col-6">
+              <div class="info-box">
+                <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-file-alt"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Total Kandidat</span>
+                  <span class="info-box-number" id="kpi-rec-total">76</span>
+                  <div class="progress progress-sm mt-1"><div class="progress-bar bg-secondary" style="width:100%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="info-box">
+                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-user-check"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">On Board</span>
+                  <span class="info-box-number" id="kpi-onboard">5</span>
+                  <div class="progress progress-sm mt-1"><div class="progress-bar bg-success" id="bar-onboard" style="width:6.6%"></div></div>
+                  <span class="progress-description" id="pct-onboard">6.6% Conversion</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="info-box">
+                <span class="info-box-icon elevation-1" style="background:var(--purple);color:#fff"><i class="fas fa-spinner"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Pipeline (Compro)</span>
+                  <span class="info-box-number" id="kpi-compro">11</span>
+                  <div class="progress progress-sm mt-1"><div class="progress-bar" id="bar-compro" style="width:14.5%;background:var(--purple)"></div></div>
+                  <span class="progress-description" id="pct-compro">14.5% dari total</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="info-box">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times-circle"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Failed Interview</span>
+                  <span class="info-box-number" id="kpi-failed">60</span>
+                  <div class="progress progress-sm mt-1"><div class="progress-bar bg-danger" id="bar-failed" style="width:78.9%"></div></div>
+                  <span class="progress-description" id="pct-failed">78.9% dari total</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARTS ROW -->
+          <div class="row">
+            <!-- Chart: Progress Rekrutmen -->
+            <div class="col-md-4">
+              <div class="card card-outline card-primary">
+                <div class="card-header card-header-sm">
+                  <h3 class="card-title">Status Rekrutmen</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart-wrap"><canvas id="chartProgress"></canvas></div>
+                </div>
+              </div>
+            </div>
+            <!-- Chart: Per Bulan -->
+            <div class="col-md-5">
+              <div class="card card-outline card-info">
+                <div class="card-header card-header-sm">
+                  <h3 class="card-title">Rekrutmen per Bulan</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart-wrap"><canvas id="chartMonth"></canvas></div>
+                </div>
+              </div>
+            </div>
+            <!-- Chart: Level -->
+            <div class="col-md-3">
+              <div class="card card-outline card-warning">
+                <div class="card-header card-header-sm">
+                  <h3 class="card-title">Level Kandidat</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart-wrap"><canvas id="chartLevel"></canvas></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divisi + Priority -->
+          <div class="row">
+            <div class="col-md-7">
+              <div class="card card-outline card-success">
+                <div class="card-header card-header-sm">
+                  <h3 class="card-title">Rekrutmen per Divisi</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div id="divisiProgressBars"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="card card-outline card-danger">
+                <div class="card-header card-header-sm">
+                  <h3 class="card-title">Priority & Sumber</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="chart-wrap" style="height:160px"><canvas id="chartPriority"></canvas></div>
+                      <div class="text-center mt-1" style="font-size:.7rem;color:#6c757d">Priority Level</div>
+                    </div>
+                    <div class="col-6">
+                      <div class="chart-wrap" style="height:160px"><canvas id="chartSourch"></canvas></div>
+                      <div class="text-center mt-1" style="font-size:.7rem;color:#6c757d">Sumber Rekrutmen</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end overview -->
+
+        <!-- =================== SECTION: REKRUTMEN =================== -->
+        <div id="section-rekrutmen" style="display:none">
+
+          <!-- Summary cards (dynamic) -->
+          <div class="row" id="rekrutmenSummaryCards">
+            <!-- generated by JS -->
+          </div>
+
+          <!-- DataTable -->
+          <div class="card card-outline card-primary">
+            <div class="card-header card-header-sm">
+              <h3 class="card-title"><i class="fas fa-table mr-1"></i>Tabel Detail Kandidat</h3>
+              <div class="card-tools">
+                <span class="badge badge-primary" id="tableCount">76 records</span>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table id="rekrutmenTable" class="table table-bordered table-striped table-hover table-sm mb-0">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Nama Kandidat</th>
+                      <th>Posisi</th>
+                      <th>Dept</th>
+                      <th>Divisi</th>
+                      <th>Level</th>
+                      <th>Gender</th>
+                      <th>Progress</th>
+                      <th>Priority</th>
+                      <th>Sumber</th>
+                      <th>SLA</th>
+                      <th>Bulan</th>
+                      <th>Tahun</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rekrutmenTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kanban pipeline view -->
+          <div class="section-divider"></div>
+          <div class="section-label"><i class="fas fa-columns mr-1"></i>Pipeline View</div>
+          <div class="row">
+            <div class="col-md-4 pipeline-col">
+              <div class="kanban-header text-white" style="background:var(--purple)">
+                <i class="fas fa-spinner mr-1"></i>Compro / Pipeline
+                <span class="badge badge-light float-right" id="kanban-count-compro">0</span>
+              </div>
+              <div id="kanban-compro"></div>
+            </div>
+            <div class="col-md-4 pipeline-col">
+              <div class="kanban-header text-white bg-success">
+                <i class="fas fa-user-check mr-1"></i>On Board
+                <span class="badge badge-light float-right" id="kanban-count-onboard">0</span>
+              </div>
+              <div id="kanban-onboard"></div>
+            </div>
+            <div class="col-md-4 pipeline-col">
+              <div class="kanban-header text-white bg-danger">
+                <i class="fas fa-times-circle mr-1"></i>Failed — Interview
+                <span class="badge badge-light float-right" id="kanban-count-failed">0</span>
+              </div>
+              <div id="kanban-failed" style="max-height:500px;overflow-y:auto"></div>
+            </div>
+          </div>
+        </div><!-- end rekrutmen -->
+
+        <!-- =================== SECTION: KARYAWAN =================== -->
+        <div id="section-karyawan" style="display:none">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card card-outline card-success">
+                <div class="card-header card-header-sm"><h3 class="card-title">Karyawan Staff — 519 Aktif</h3></div>
+                <div class="card-body">
+                  <div class="row text-center mb-3">
+                    <div class="col-6">
+                      <div class="description-block border-right">
+                        <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 62.2%</span>
+                        <h5 class="description-header">323</h5>
+                        <span class="description-text">KONTRAK (PKWT)</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="description-block">
+                        <span class="description-percentage text-primary"><i class="fas fa-caret-up"></i> 37.2%</span>
+                        <h5 class="description-header">193</h5>
+                        <span class="description-text">PROBATION</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="progress mb-2" style="height:18px">
+                    <div class="progress-bar bg-success" style="width:62.2%" title="Kontrak">Kontrak 62.2%</div>
+                    <div class="progress-bar bg-primary" style="width:37.2%" title="Probation">Probation 37.2%</div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-1"><small>Kontrak (PKWT)</small><small class="font-weight-bold">323</small></div>
+                    <div class="progress progress-sm mb-3"><div class="progress-bar bg-success" style="width:62.2%"></div></div>
+                    <div class="d-flex justify-content-between mb-1"><small>Probation (Percobaan)</small><small class="font-weight-bold">193</small></div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-primary" style="width:37.2%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card card-outline card-warning">
+                <div class="card-header card-header-sm"><h3 class="card-title">Non-Staff — 149 Aktif</h3></div>
+                <div class="card-body">
+                  <div class="row text-center mb-3">
+                    <div class="col-6">
+                      <div class="description-block border-right">
+                        <span class="description-percentage text-warning"><i class="fas fa-caret-up"></i> 96.6%</span>
+                        <h5 class="description-header">144</h5>
+                        <span class="description-text">KONTRAK (PKWT)</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="description-block">
+                        <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 3.4%</span>
+                        <h5 class="description-header">5</h5>
+                        <span class="description-text">PROBATION</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="progress mb-2" style="height:18px">
+                    <div class="progress-bar bg-warning" style="width:96.6%" title="Kontrak">Kontrak 96.6%</div>
+                    <div class="progress-bar bg-success" style="width:3.4%" title="Probation"></div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-1"><small>Kontrak (PKWT)</small><small class="font-weight-bold">144</small></div>
+                    <div class="progress progress-sm mb-3"><div class="progress-bar bg-warning" style="width:96.6%"></div></div>
+                    <div class="d-flex justify-content-between mb-1"><small>Probation (Percobaan)</small><small class="font-weight-bold">5</small></div>
+                    <div class="progress progress-sm"><div class="progress-bar bg-success" style="width:3.4%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total summary table -->
+          <div class="card card-outline card-info">
+            <div class="card-header card-header-sm"><h3 class="card-title"><i class="fas fa-table mr-1"></i>Ringkasan Ketenagakerjaan</h3></div>
+            <div class="card-body p-0">
+              <table class="table table-bordered table-sm mb-0">
+                <thead class="thead-dark">
+                  <tr><th>Kategori</th><th>Kontrak</th><th>Probation</th><th>Total</th><th>% Total</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Staff</strong></td>
+                    <td><span class="badge badge-success">323</span></td>
+                    <td><span class="badge badge-primary">193</span></td>
+                    <td><strong>519</strong></td>
+                    <td>
+                      <div class="progress progress-sm" style="min-width:80px">
+                        <div class="progress-bar bg-success" style="width:77.7%"></div>
+                      </div>
+                      <small>77.7%</small>
+                    </td>
+                    <td><span class="badge badge-success">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Non-Staff</strong></td>
+                    <td><span class="badge badge-warning">144</span></td>
+                    <td><span class="badge badge-success">5</span></td>
+                    <td><strong>149</strong></td>
+                    <td>
+                      <div class="progress progress-sm" style="min-width:80px">
+                        <div class="progress-bar bg-warning" style="width:22.3%"></div>
+                      </div>
+                      <small>22.3%</small>
+                    </td>
+                    <td><span class="badge badge-success">Aktif</span></td>
+                  </tr>
+                  <tr class="table-primary">
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>467</strong></td>
+                    <td><strong>198</strong></td>
+                    <td><strong class="text-primary" style="font-size:1rem">668</strong></td>
+                    <td><span class="badge badge-primary">100%</span></td>
+                    <td><span class="badge badge-primary">Konawe Site</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- end karyawan -->
+
+        <!-- =================== SECTION: MPP =================== -->
+        <div id="section-mpp" style="display:none">
+          <div class="row">
+            <div class="col-lg-3 col-6">
+              <div class="small-box" style="background:#6f42c1;color:#fff">
+                <div class="inner"><h3>540</h3><p>Total Posisi MPP 2025</p></div>
+                <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+                <a href="#" class="small-box-footer text-white-50">Rencana tenaga kerja</a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-primary">
+                <div class="inner"><h3>135</h3><p>Level Officer</p></div>
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <a href="#" class="small-box-footer">25% dari MPP</a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-info">
+                <div class="inner"><h3>129</h3><p>Level Supervisor</p></div>
+                <div class="icon"><i class="fas fa-user-cog"></i></div>
+                <a href="#" class="small-box-footer">23.9% dari MPP</a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-6">
+              <div class="small-box bg-success">
+                <div class="inner"><h3 class="text-white">+128</h3><p>Gap (Aktif vs MPP)</p></div>
+                <div class="icon"><i class="fas fa-balance-scale"></i></div>
+                <a href="#" class="small-box-footer">668 aktif vs 540 MPP</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card card-outline card-primary">
+                <div class="card-header card-header-sm"><h3 class="card-title">MPP per Divisi (Top 10)</h3></div>
+                <div class="card-body">
+                  <div id="mppDivisiBar"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card card-outline card-info">
+                <div class="card-header card-header-sm"><h3 class="card-title">MPP per Jenjang Jabatan</h3></div>
+                <div class="card-body">
+                  <div class="chart-wrap" style="height:240px"><canvas id="chartMppGrade"></canvas></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-outline card-success">
+            <div class="card-header card-header-sm">
+              <h3 class="card-title"><i class="fas fa-balance-scale mr-1"></i>Gap Analysis — Karyawan Aktif vs MPP</h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 text-center">
+                  <div style="font-size:3rem;font-weight:700;color:#007bff">668</div>
+                  <div class="text-muted">Karyawan Aktif (OL)</div>
+                </div>
+                <div class="col-md-4 text-center d-flex align-items-center justify-content-center">
+                  <div>
+                    <div style="font-size:2.5rem;color:#28a745"><i class="fas fa-arrow-right"></i></div>
+                    <div class="badge badge-success badge-pill mt-1" style="font-size:.85rem">+128 MELEBIHI MPP</div>
+                  </div>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div style="font-size:3rem;font-weight:700;color:#6f42c1">540</div>
+                  <div class="text-muted">Posisi MPP 2025</div>
+                </div>
+              </div>
+              <div class="progress mt-3" style="height:22px">
+                <div class="progress-bar bg-primary" style="width:55.3%" title="Staff">Staff 519</div>
+                <div class="progress-bar bg-warning" style="width:12.4%" title="Non-Staff">Non-Staff 149</div>
+                <div class="progress-bar bg-success" style="width:10.6%;opacity:.5" title="Melebihi MPP">+128</div>
+              </div>
+              <div class="row mt-2 text-center">
+                <div class="col-4"><small class="text-muted">Staff: 519</small></div>
+                <div class="col-4"><small class="text-muted">Non-Staff: 149</small></div>
+                <div class="col-4"><small class="text-success font-weight-bold">Surplus: +128</small></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end mpp -->
+
+      </div><!-- /container-fluid -->
+    </section>
+  </div><!-- /content-wrapper -->
+
+  <footer class="main-footer">
+    <strong>PT Sulawesi Cahaya Mineral — SCM Division</strong>
+    <div class="float-right d-none d-sm-inline-block">
+      <b>HR Dashboard</b> MPP-970 | Site Konawe | Data 2024–2025
+      &nbsp;&nbsp;
+      <span class="badge badge-warning">⚠ Prototipe — Sebelum Backend</span>
+    </div>
+  </footer>
+</div><!-- /wrapper -->
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+// =============================================
+//  RAW DATA dari Excel (76 rekrutmen records)
+// =============================================
+const RAW_DATA = [
+  {nama:"Agus Salim",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Compro",priority:"",sumber:"PUS",sla:49,bulan:"September",tahun:2025},
+  {nama:"Antonius Mapau",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Compro",priority:"",sumber:"PUS",sla:49,bulan:"September",tahun:2025},
+  {nama:"Muamar Sino",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Compro",priority:"",sumber:"PUS",sla:49,bulan:"September",tahun:2025},
+  {nama:"Pandi Usna",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Compro",priority:"",sumber:"PUS",sla:49,bulan:"September",tahun:2025},
+  {nama:"Petrus Tonglo",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Compro",priority:"",sumber:"PUS",sla:49,bulan:"September",tahun:2025},
+  {nama:"Febrizka Hayati",posisi:"IT Helpdesk Officer",dept:"Commercial & IT",divisi:"Commercial & IT",level:"Officer",gender:"Female",progress:"Compro",priority:"",sumber:"Referral",sla:6,bulan:"October",tahun:2025},
+  {nama:"Federika Agatha",posisi:"Secretary",dept:"Business Development",divisi:"Research & Development",level:"Supervisor",gender:"Female",progress:"Compro",priority:"",sumber:"Referral",sla:null,bulan:"October",tahun:2025},
+  {nama:"Sandi Kurniawan",posisi:"IHOH Officer",dept:"Industrial Hygiene OH",divisi:"OHS & Assets Protection",level:"Officer",gender:"Male",progress:"Compro",priority:"",sumber:"Referral",sla:67,bulan:"October",tahun:2025},
+  {nama:"Nurdin Hamzah",posisi:"Surveyor Aerial Mapping",dept:"Survey",divisi:"Operation",level:"Officer",gender:"Male",progress:"Compro",priority:"",sumber:"Referral",sla:25,bulan:"November",tahun:2025},
+  {nama:"Faris Putra Norvfiyan",posisi:"Mine Operation Readiness Foreman",dept:"Mine Readiness",divisi:"Mine Engineering",level:"Officer",gender:"Male",progress:"Compro",priority:"",sumber:"LinkedIn",sla:36,bulan:"November",tahun:2025},
+  {nama:"Timothy Tobias",posisi:"Senior Engineer Pit Service",dept:"",divisi:"",level:"",gender:"Male",progress:"Compro",priority:"",sumber:"LinkedIn",sla:null,bulan:"March",tahun:2026},
+  {nama:"Qurrota Ayun",posisi:"Electrical Engineer",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Officer",gender:"Male",progress:"On Board",priority:"",sumber:"Referral",sla:30,bulan:"January",tahun:2024},
+  {nama:"Didik Six Cahyono Wibowo",posisi:"High Voltage Foreman",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Officer",gender:"Male",progress:"On Board",priority:"",sumber:"Referral",sla:30,bulan:"March",tahun:2024},
+  {nama:"Dirman Cahyono",posisi:"Mechanic Supervisor",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Supervisor",gender:"Male",progress:"On Board",priority:"",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Yohanis Dede",posisi:"Electrical",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Non-Staff",gender:"Male",progress:"On Board",priority:"",sumber:"Referral",sla:30,bulan:"June",tahun:2024},
+  {nama:"Rober Limbongan",posisi:"Mechanic",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Non-Staff",gender:"Male",progress:"On Board",priority:"",sumber:"BSI",sla:30,bulan:"July",tahun:2024},
+  {nama:"Igo Pardede",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"April",tahun:2024},
+  {nama:"Wiji Permadi",posisi:"MEP Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:null,bulan:"May",tahun:2024},
+  {nama:"Advenly Pangayouw",posisi:"Safety Trainer",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Anwar Holil Hadian",posisi:"Safety Trainer",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Resala Debi",posisi:"MEP Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:null,bulan:"May",tahun:2024},
+  {nama:"Muhammad Rizky Ananda",posisi:"Facility & Camp Services Foreman",dept:"General Affairs",divisi:"HRGA Operation",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"NP",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Agro Forestriawan Nugroho",posisi:"Reclamation & Revegetation Supervisor",dept:"Environmental Operation",divisi:"Compliance & Environmental",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Almes Meigory",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Giovani Tambunan",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Nenden Aditya Pursita Ningrum",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Female",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Anfansha Afkar",posisi:"Community Relation Superintendent",dept:"Community Affairs",divisi:"Community Affairs",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Geri Rahmat Runandi",posisi:"GIS & Aerial Map",dept:"Survey",divisi:"Operation",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Susanto",posisi:"Safety Trainer",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Zainal Arifin",posisi:"Safety Trainer",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Ahmad Firdaus A",posisi:"Surveyor Leadhand",dept:"Survey",divisi:"Operation",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:25,bulan:"June",tahun:2024},
+  {nama:"Diki Dimas Lestari",posisi:"Exploration Drilling Leadhand",dept:"Exploration Drilling",divisi:"Exploration & Resources Development",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Kristian Lomba",posisi:"Safety Trainer",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Andromedha",posisi:"Electrical Superintendent",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Assistant Manager",gender:"Female",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"May",tahun:2024},
+  {nama:"Saidi",posisi:"Exploration Drilling Leadhand",dept:"Exploration Drilling",divisi:"Exploration & Resources Development",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Sunardi",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Vecky Robert Panekenan",posisi:"Mine Operation Supervisor",dept:"Mine Operation",divisi:"Operation",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Astina Aras",posisi:"Document Project Control Officer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"NP",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Muthia Muthmainnah Silondae",posisi:"Document Project Control Officer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Officer",gender:"Female",progress:"Failed - Interview",priority:"NP",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Agus Riyanto",posisi:"Business & Reporting Senior Analist",dept:"Commercial & IT",divisi:"Commercial & IT",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Chario",posisi:"Business & Reporting Senior Analist",dept:"Commercial & IT",divisi:"Commercial & IT",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Joko Triyanto",posisi:"Scheduler Civil Senior Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:null,bulan:"July",tahun:2024},
+  {nama:"M. Ardan Ibrahim",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Sarman",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Marsel Palullungan",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Yunus Pasae",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Yusuf Sampe",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"M. Khaeron",posisi:"MEP Superintendent",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"NP",sumber:"Referral",sla:null,bulan:"July",tahun:2024},
+  {nama:"Ricky Andreas",posisi:"MEP Senior Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:null,bulan:"July",tahun:2024},
+  {nama:"Hengki Purnando",posisi:"Production Engineer",dept:"Production Engineering",divisi:"Operation",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Muh. Afif Ishak",posisi:"Grade Control Foreman",dept:"Mine Geology",divisi:"Mine Geology & QA",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Muh. Raihan",posisi:"Grade Control Foreman",dept:"Mine Geology",divisi:"Mine Geology & QA",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Muhammad Sofyan",posisi:"Hydrology Senior Engineer",dept:"Geotech & Hydrology",divisi:"Mine Engineering",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P3",sumber:"Referral",sla:30,bulan:"July",tahun:2024},
+  {nama:"Rajab",posisi:"Safety Hauling Patrol",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"August",tahun:2024},
+  {nama:"Zamla",posisi:"Safety Hauling Patrol",dept:"Occupational Health & Safety",divisi:"OHS & Assets Protection",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P2",sumber:"Referral",sla:30,bulan:"August",tahun:2024},
+  {nama:"Heriaswin Malangi",posisi:"Mine Engineer Specialist",dept:"",divisi:"",level:"",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"LinkedIn",sla:30,bulan:"August",tahun:2024},
+  {nama:"Agus Setyawan",posisi:"Surveyor Leadhand",dept:"Survey",divisi:"Operation",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:81,bulan:"August",tahun:2024},
+  {nama:"Alam Tronics",posisi:"Geotechnical & Hydrology Superintendent",dept:"Geotech & Hydrology",divisi:"Mine Engineering",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"LinkedIn",sla:30,bulan:"August",tahun:2024},
+  {nama:"Muhammad Fathin Firaz",posisi:"Geotechnical & Hydrology Superintendent",dept:"Geotech & Hydrology",divisi:"Mine Engineering",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"LinkedIn",sla:30,bulan:"August",tahun:2024},
+  {nama:"Sanuddin",posisi:"Surveyor Leadhand",dept:"Survey",divisi:"Operation",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:81,bulan:"August",tahun:2024},
+  {nama:"Adven Adi Saputra",posisi:"Grade Control Foreman",dept:"Mine Geology",divisi:"Mine Geology & QA",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"August",tahun:2024},
+  {nama:"Muhammad Indra",posisi:"Grade Control Foreman",dept:"Mine Geology",divisi:"Mine Geology & QA",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"Referral",sla:30,bulan:"August",tahun:2024},
+  {nama:"Henri Sinaga",posisi:"MEP Senior Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"Referral",sla:null,bulan:"August",tahun:2024},
+  {nama:"Julius Sukarto",posisi:"Road Maintenance Supervisor",dept:"Road Maintenance",divisi:"Ore Haulage",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:44,bulan:"August",tahun:2024},
+  {nama:"Yan Adiguna Nastuion",posisi:"Scheduler Civil Senior Engineer",dept:"Engineering & Capital Project",divisi:"Strategic Project & Infrastructure",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:null,bulan:"August",tahun:2024},
+  {nama:"Joko Winarji",posisi:"Mechanic",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Hari Setyo Budi",posisi:"Community Development Officer",dept:"Community Affairs",divisi:"Community Affairs",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Pelipus Niko Moll",posisi:"Mechanic",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"June",tahun:2024},
+  {nama:"Adhyatma Damopolii",posisi:"Media Relation Supervisor",dept:"Community Affairs",divisi:"Community Affairs",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Ahmad Amiludin",posisi:"Mine Development Operator",dept:"Mine Development",divisi:"Strategic Project & Infrastructure",level:"Non-Staff",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Arinta Wihandana",posisi:"Reclamation & Revegetation Supervisor",dept:"Environmental Operation",divisi:"Compliance & Environmental",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Bagas Andry Andika",posisi:"Compliance & Reporting Officer",dept:"Compliance & Forestry",divisi:"Compliance & Environmental",level:"Officer",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Dedy Indrawan Daulay",posisi:"Grade Control Pit Supervisor",dept:"Mine Geology",divisi:"Mine Geology & QA",level:"Supervisor",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Muslichin",posisi:"Business & Reporting Superintendent",dept:"Commercial & IT",divisi:"Commercial & IT",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:30,bulan:"August",tahun:2024},
+  {nama:"Yasmina Saputri",posisi:"Admin Production & Cost Engineering",dept:"Production & Cost Engineering",divisi:"Operation",level:"Non-Staff",gender:"Female",progress:"Failed - Interview",priority:"",sumber:"BSI",sla:20,bulan:"August",tahun:2024},
+  {nama:"Randy Arifia",posisi:"Electrical Superintendent",dept:"General Facility & Maintenance",divisi:"General Facility & Maintenance",level:"Assistant Manager",gender:"Male",progress:"Failed - Interview",priority:"P1",sumber:"Referral",sla:30,bulan:"August",tahun:2024}
+];
+
+// =============================================
+//  STATE
+// =============================================
+let filteredData = [...RAW_DATA];
+let dtTable = null;
+let charts = {};
+
+// =============================================
+//  INIT
+// =============================================
+$(document).ready(function() {
+  $('.select2bs4').select2({ theme:'bootstrap4', placeholder:'-- Semua --', allowClear:true });
+
+  // Auto-apply on select change
+  $('#fYear,#fMonth,#fProgress,#fLevel,#fDivisi,#fPriority,#fSourch,#fGender').on('change', function(){ applyFilters(); });
+  $('#fSearch').on('keyup', function(){ applyFilters(); });
+
+  initCharts();
+  renderOverview();
+  renderRekrutmenTable();
+  renderKanban();
+  renderMPP();
+});
+
+// =============================================
+//  FILTER ENGINE
+// =============================================
+function applyFilters() {
+  const years   = $('#fYear').val()     || [];
+  const months  = $('#fMonth').val()    || [];
+  const progs   = $('#fProgress').val() || [];
+  const levels  = $('#fLevel').val()    || [];
+  const divisi  = $('#fDivisi').val();
+  const prio    = $('#fPriority').val();
+  const sourch  = $('#fSourch').val();
+  const gender  = $('#fGender').val();
+  const search  = ($('#fSearch').val()||'').toLowerCase();
+
+  filteredData = RAW_DATA.filter(d => {
+    if (years.length   && !years.includes(String(d.tahun)))   return false;
+    if (months.length  && !months.includes(d.bulan))          return false;
+    if (progs.length   && !progs.includes(d.progress))        return false;
+    if (levels.length  && !levels.includes(d.level))          return false;
+    if (divisi         && d.divisi !== divisi)                 return false;
+    if (prio           && d.priority !== prio)                 return false;
+    if (sourch         && d.sumber !== sourch)                 return false;
+    if (gender         && d.gender !== gender)                 return false;
+    if (search && !d.nama.toLowerCase().includes(search) && !d.posisi.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  updateActiveFilterBadges({ years, months, progs, levels, divisi, prio, sourch, gender, search });
+  renderOverview();
+  renderRekrutmenTable();
+  renderKanban();
+  updateCharts();
+}
+
+function resetFilters() {
+  $('#fYear,#fMonth,#fProgress,#fLevel').val(null).trigger('change');
+  $('#fDivisi,#fPriority,#fSourch,#fGender').val('').trigger('change');
+  $('#fSearch').val('');
+  filteredData = [...RAW_DATA];
+  updateActiveFilterBadges({});
+  renderOverview();
+  renderRekrutmenTable();
+  renderKanban();
+  updateCharts();
+}
+
+function updateActiveFilterBadges(f) {
+  const badges = [];
+  if (f.years   && f.years.length)  badges.push(...f.years.map(v=>`Tahun: ${v}`));
+  if (f.months  && f.months.length) badges.push(...f.months.map(v=>`Bulan: ${v}`));
+  if (f.progs   && f.progs.length)  badges.push(...f.progs.map(v=>`Progress: ${v}`));
+  if (f.levels  && f.levels.length) badges.push(...f.levels.map(v=>`Level: ${v}`));
+  if (f.divisi)  badges.push(`Divisi: ${f.divisi}`);
+  if (f.prio)    badges.push(`Priority: ${f.prio}`);
+  if (f.sourch)  badges.push(`Sumber: ${f.sourch}`);
+  if (f.gender)  badges.push(`Gender: ${f.gender}`);
+  if (f.search)  badges.push(`Cari: "${f.search}"`);
+
+  if (badges.length) {
+    $('#activeFiltersBar').show();
+    $('#activeFilterBadges').html(badges.map(b=>`<span class="badge badge-info badge-pill">${b}</span>`).join(''));
+  } else {
+    $('#activeFiltersBar').hide();
+  }
+}
+
+// =============================================
+//  SECTION NAVIGATION
+// =============================================
+function showSection(sec) {
+  ['overview','rekrutmen','karyawan','mpp'].forEach(s => {
+    $(`#section-${s}`).hide();
+    $(`#menu-${s}`).removeClass('active');
+  });
+  $(`#section-${sec}`).show();
+  $(`#menu-${sec}`).addClass('active');
+
+  const labels = {overview:'Overview Dashboard', rekrutmen:'Monitoring Rekrutmen', karyawan:'Data Karyawan', mpp:'MPP Planning'};
+  const icons  = {overview:'tachometer-alt', rekrutmen:'search', karyawan:'users', mpp:'clipboard-list'};
+  $('#pageTitle').html(`<i class="fas fa-${icons[sec]} mr-2 text-primary"></i>${labels[sec]}`);
+  $('#breadcrumbActive').text(labels[sec]);
+
+  const filterSections = ['overview','rekrutmen'];
+  filterSections.includes(sec) ? $('#globalFilterBar').show() : $('#globalFilterBar').hide();
+
+  return false;
+}
+
+// =============================================
+//  RENDER OVERVIEW KPIs
+// =============================================
+function renderOverview() {
+  const d = filteredData;
+  const total   = d.length;
+  const onboard = d.filter(x=>x.progress==='On Board').length;
+  const compro  = d.filter(x=>x.progress==='Compro').length;
+  const failed  = d.filter(x=>x.progress==='Failed - Interview').length;
+
+  $('#kpi-rec-total').text(total);
+  $('#kpi-onboard').text(onboard);
+  $('#kpi-compro').text(compro);
+  $('#kpi-failed').text(failed);
+
+  const pctOB = total ? ((onboard/total)*100).toFixed(1) : 0;
+  const pctCP = total ? ((compro/total)*100).toFixed(1)  : 0;
+  const pctFL = total ? ((failed/total)*100).toFixed(1)  : 0;
+
+  $('#bar-onboard').css('width', pctOB+'%');
+  $('#bar-compro').css('width', pctCP+'%');
+  $('#bar-failed').css('width', pctFL+'%');
+  $('#pct-onboard').text(pctOB+'% Conversion');
+  $('#pct-compro').text(pctCP+'% dari total');
+  $('#pct-failed').text(pctFL+'% dari total');
+
+  // Divisi bar
+  renderDivisiBar();
+}
+
+function renderDivisiBar() {
+  const divCount = {};
+  filteredData.forEach(d => { if(d.divisi) divCount[d.divisi] = (divCount[d.divisi]||0)+1; });
+  const sorted = Object.entries(divCount).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const max = sorted[0]?.[1] || 1;
+  const colors = ['primary','success','info','warning','danger','secondary','primary','info','warning','success'];
+
+  const html = sorted.map(([name, cnt], i) => `
+    <div class="d-flex justify-content-between mb-1">
+      <span style="font-size:.75rem;max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${name}</span>
+      <span style="font-size:.75rem;font-weight:700">${cnt}</span>
+    </div>
+    <div class="progress progress-sm mb-2">
+      <div class="progress-bar bg-${colors[i%colors.length]}" style="width:${(cnt/max*100).toFixed(0)}%" title="${name}: ${cnt}"></div>
+    </div>
+  `).join('');
+  $('#divisiProgressBars').html(html || '<p class="text-muted small">Tidak ada data</p>');
+}
+
+// =============================================
+//  RENDER TABLE
+// =============================================
+function renderRekrutmenTable() {
+  const d = filteredData;
+  $('#tableCount').text(d.length + ' records');
+
+  // Summary cards
+  const onboard = d.filter(x=>x.progress==='On Board').length;
+  const compro  = d.filter(x=>x.progress==='Compro').length;
+  const failed  = d.filter(x=>x.progress==='Failed - Interview').length;
+
+  $('#rekrutmenSummaryCards').html(`
+    <div class="col-sm-3"><div class="info-box mb-3">
+      <span class="info-box-icon bg-secondary"><i class="fas fa-users"></i></span>
+      <div class="info-box-content"><span class="info-box-text">Total</span><span class="info-box-number">${d.length}</span></div>
+    </div></div>
+    <div class="col-sm-3"><div class="info-box mb-3">
+      <span class="info-box-icon bg-success"><i class="fas fa-user-check"></i></span>
+      <div class="info-box-content"><span class="info-box-text">On Board</span><span class="info-box-number">${onboard}</span></div>
+    </div></div>
+    <div class="col-sm-3"><div class="info-box mb-3">
+      <span class="info-box-icon" style="background:var(--purple);color:#fff"><i class="fas fa-spinner"></i></span>
+      <div class="info-box-content"><span class="info-box-text">Compro</span><span class="info-box-number">${compro}</span></div>
+    </div></div>
+    <div class="col-sm-3"><div class="info-box mb-3">
+      <span class="info-box-icon bg-danger"><i class="fas fa-times"></i></span>
+      <div class="info-box-content"><span class="info-box-text">Failed</span><span class="info-box-number">${failed}</span></div>
+    </div></div>
+  `);
+
+  // Build table rows
+  const progressBadge = p => {
+    if(p==='On Board')         return `<span class="badge badge-success badge-pill-sm">${p}</span>`;
+    if(p==='Compro')           return `<span class="badge badge-pill-sm" style="background:var(--purple);color:#fff">${p}</span>`;
+    if(p==='Failed - Interview') return `<span class="badge badge-danger badge-pill-sm">Failed</span>`;
+    return `<span class="badge badge-secondary badge-pill-sm">${p}</span>`;
+  };
+  const prioColor = {P1:'danger',P2:'warning',P3:'info',NP:'secondary'};
+  const slaHTML = sla => {
+    if(!sla) return '<span class="text-muted">—</span>';
+    if(sla<=30) return `<span class="sla-ok">${sla}h</span>`;
+    if(sla<=60) return `<span class="sla-warn">${sla}h</span>`;
+    return `<span class="sla-over">${sla}h</span>`;
+  };
+
+  const rows = d.map((r,i) => `
+    <tr>
+      <td class="text-muted" style="font-size:.7rem">${String(i+1).padStart(2,'0')}</td>
+      <td><strong>${r.nama}</strong></td>
+      <td style="max-width:150px">${r.posisi}</td>
+      <td style="max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.dept||'—'}</td>
+      <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.divisi||'—'}</td>
+      <td>${r.level ? `<span class="badge badge-outline-info" style="font-size:.65rem;border:1px solid #17a2b8;color:#17a2b8;padding:.2em .5em">${r.level}</span>` : '—'}</td>
+      <td>${r.gender==='Female' ? '<i class="fas fa-venus text-danger"></i>' : '<i class="fas fa-mars text-primary"></i>'} ${r.gender}</td>
+      <td>${progressBadge(r.progress)}</td>
+      <td>${r.priority ? `<span class="badge badge-${prioColor[r.priority]||'secondary'} badge-pill-sm">${r.priority}</span>` : '<span class="text-muted">—</span>'}</td>
+      <td>${r.sumber||'—'}</td>
+      <td>${slaHTML(r.sla)}</td>
+      <td>${r.bulan}</td>
+      <td>${r.tahun}</td>
+    </tr>
+  `).join('');
+
+  $('#rekrutmenTbody').html(rows || '<tr><td colspan="13" class="text-center text-muted py-4">Tidak ada data untuk filter yang dipilih</td></tr>');
+
+  // Re-init DataTable
+  if(dtTable){ dtTable.destroy(); dtTable=null; }
+  dtTable = $('#rekrutmenTable').DataTable({
+    pageLength: 15,
+    lengthMenu: [10,15,25,50,100],
+    language: {
+      search:"Cari:", lengthMenu:"Tampilkan _MENU_ data",
+      info:"Menampilkan _START_–_END_ dari _TOTAL_ data",
+      paginate:{first:"«",last:"»",next:"›",previous:"‹"},
+      emptyTable:"Tidak ada data"
+    },
+    order:[[7,'asc']],
+    columnDefs:[{targets:0,orderable:false}]
+  });
+}
+
+// =============================================
+//  KANBAN
+// =============================================
+function renderKanban() {
+  const groups = { 'Compro': [], 'On Board': [], 'Failed - Interview': [] };
+  filteredData.forEach(d => { if(groups[d.progress]) groups[d.progress].push(d); });
+
+  const prioColor = {P1:'danger',P2:'warning',P3:'info',NP:'secondary'};
+
+  const cardHTML = (d, cls) => `
+    <div class="card ${cls} mb-2 shadow-sm">
+      <div class="card-body p-2">
+        <div class="font-weight-bold" style="font-size:.8rem">${d.nama}</div>
+        <div class="text-muted" style="font-size:.72rem">${d.posisi}</div>
+        <div class="mt-1 d-flex flex-wrap" style="gap:3px">
+          ${d.divisi ? `<span class="badge badge-light" style="font-size:.62rem;border:1px solid #ddd">${d.divisi.split(' ')[0]}</span>` : ''}
+          ${d.level  ? `<span class="badge badge-info badge-pill-sm" style="font-size:.62rem">${d.level}</span>` : ''}
+          ${d.priority ? `<span class="badge badge-${prioColor[d.priority]||'secondary'} badge-pill-sm" style="font-size:.62rem">${d.priority}</span>` : ''}
+          ${d.sumber ? `<span class="badge badge-secondary badge-pill-sm" style="font-size:.62rem">${d.sumber}</span>` : ''}
+        </div>
+        <div class="text-muted mt-1" style="font-size:.68rem">${d.bulan} ${d.tahun}</div>
+      </div>
+    </div>
+  `;
+
+  $('#kanban-compro').html(groups['Compro'].map(d=>cardHTML(d,'card-pipeline-compro')).join('') || '<p class="text-muted small">Tidak ada data</p>');
+  $('#kanban-onboard').html(groups['On Board'].map(d=>cardHTML(d,'card-pipeline-onboard')).join('') || '<p class="text-muted small">Tidak ada data</p>');
+  $('#kanban-failed').html(groups['Failed - Interview'].map(d=>cardHTML(d,'card-pipeline-failed')).join('') || '<p class="text-muted small">Tidak ada data</p>');
+
+  $('#kanban-count-compro').text(groups['Compro'].length);
+  $('#kanban-count-onboard').text(groups['On Board'].length);
+  $('#kanban-count-failed').text(groups['Failed - Interview'].length);
+}
+
+// =============================================
+//  CHARTS
+// =============================================
+function initCharts() {
+  const opts = { responsive:true, maintainAspectRatio:false };
+
+  // Progress donut
+  charts.progress = new Chart($('#chartProgress'), {
+    type:'doughnut',
+    data:{ labels:['Compro','On Board','Failed'],
+      datasets:[{ data:[11,5,60],
+        backgroundColor:['#6f42c1','#28a745','#dc3545'],
+        borderWidth:2, borderColor:'#fff' }]
+    },
+    options:{ ...opts, plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, padding:8 } } } }
+  });
+
+  // Month bar
+  const monthOrder = ['January','March','April','May','June','July','August','September','October','November'];
+  const monthVals  = [1,2,1,15,9,17,21,5,3,2];
+  charts.month = new Chart($('#chartMonth'), {
+    type:'bar',
+    data:{ labels:monthOrder.map(m=>m.substr(0,3)),
+      datasets:[{ label:'Kandidat', data:monthVals,
+        backgroundColor:'rgba(0,123,255,0.7)', borderRadius:4 }]
+    },
+    options:{ ...opts, plugins:{ legend:{display:false} },
+      scales:{ x:{grid:{display:false}}, y:{beginAtZero:true, ticks:{stepSize:5}} } }
+  });
+
+  // Level polar
+  charts.level = new Chart($('#chartLevel'), {
+    type:'polarArea',
+    data:{ labels:['Officer','Non-Staff','Supervisor','Asst. Mgr'],
+      datasets:[{ data:[24,23,20,7],
+        backgroundColor:['rgba(0,123,255,.7)','rgba(255,193,7,.7)','rgba(40,167,69,.7)','rgba(111,66,193,.7)'] }]
+    },
+    options:{ ...opts, plugins:{ legend:{ position:'bottom', labels:{ font:{size:10}, padding:5 } } } }
+  });
+
+  // Priority doughnut
+  charts.priority = new Chart($('#chartPriority'), {
+    type:'doughnut',
+    data:{ labels:['P1','P2','P3','NP','—'],
+      datasets:[{ data:[21,10,6,4,35],
+        backgroundColor:['#dc3545','#ffc107','#17a2b8','#6c757d','#dee2e6'],
+        borderWidth:1 }]
+    },
+    options:{ ...opts, plugins:{ legend:{ position:'bottom', labels:{ font:{size:9}, padding:4 } } } }
+  });
+
+  // Source bar
+  charts.sourch = new Chart($('#chartSourch'), {
+    type:'bar',
+    data:{ labels:['Referral','BSI','LinkedIn','PUS'],
+      datasets:[{ data:[42,19,5,5],
+        backgroundColor:['#007bff','#28a745','#0a9396','#6f42c1'], borderRadius:4 }]
+    },
+    options:{ ...opts, indexAxis:'y',
+      plugins:{ legend:{display:false} },
+      scales:{ x:{beginAtZero:true,grid:{display:false}} }
+    }
+  });
+
+  // MPP Grade
+  renderMPP();
+}
+
+function updateCharts() {
+  const d = filteredData;
+  const compro  = d.filter(x=>x.progress==='Compro').length;
+  const onboard = d.filter(x=>x.progress==='On Board').length;
+  const failed  = d.filter(x=>x.progress==='Failed - Interview').length;
+  charts.progress.data.datasets[0].data = [compro, onboard, failed];
+  charts.progress.update();
+
+  const monthOrder = ['January','March','April','May','June','July','August','September','October','November'];
+  const monthVals  = monthOrder.map(m => d.filter(x=>x.bulan===m).length);
+  charts.month.data.datasets[0].data = monthVals;
+  charts.month.update();
+
+  const levels = ['Officer','Non-Staff','Supervisor','Assistant Manager'];
+  const lvData = levels.map(l => d.filter(x=>x.level===l).length);
+  charts.level.data.datasets[0].data = lvData;
+  charts.level.update();
+
+  const prios = ['P1','P2','P3','NP',''];
+  const pData = prios.map(p => d.filter(x=>x.priority===p).length);
+  charts.priority.data.datasets[0].data = [pData[0],pData[1],pData[2],pData[3],pData[4]];
+  charts.priority.update();
+
+  const sourches = ['Referral','BSI','LinkedIn','PUS'];
+  const sData = sourches.map(s => d.filter(x=>x.sumber===s).length);
+  charts.sourch.data.datasets[0].data = sData;
+  charts.sourch.update();
+
+  renderDivisiBar();
+}
+
+function renderMPP() {
+  // MPP Grade chart
+  if(!document.getElementById('chartMppGrade')) return;
+  if(charts.mppGrade) { charts.mppGrade.destroy(); }
+
+  charts.mppGrade = new Chart($('#chartMppGrade'), {
+    type:'bar',
+    data:{
+      labels:['Officer','Supervisor','Labour Supply','Asst. Mgr','Non-Staff','Manager','Sr. Manager','Gen. Mgr','Exec. Comm.'],
+      datasets:[{
+        label:'Jumlah Posisi',
+        data:[135,129,74,71,65,38,16,7,4],
+        backgroundColor:['#007bff','#17a2b8','#ffc107','#28a745','#6f42c1','#fd7e14','#dc3545','#6c757d','#343a40'],
+        borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      indexAxis:'y',
+      plugins:{ legend:{display:false} },
+      scales:{ x:{beginAtZero:true,grid:{color:'#f4f6f9'}} }
+    }
+  });
+
+  // MPP Divisi bars
+  const mppDivisi = [
+    ['Compliance & Environmental',58], ['General Facility & Maint.',50],
+    ['Exploration & Resources Dev.',43], ['Strategic Project & Infra',41],
+    ['Commercial & IT',38], ['OHS & Assets Protection',38],
+    ['Operation',34], ['Mine Geology & QA',31],
+    ['Estate Management',31], ['HRGA Operation',30]
+  ];
+  const mppMax = 58;
+  const mppColors = ['primary','success','info','warning','danger','secondary','primary','info','warning','success'];
+  const mppHTML = mppDivisi.map(([name,cnt],i)=>`
+    <div class="d-flex justify-content-between mb-1">
+      <span style="font-size:.74rem">${name}</span>
+      <span style="font-size:.74rem;font-weight:700">${cnt}</span>
+    </div>
+    <div class="progress progress-sm mb-2">
+      <div class="progress-bar bg-${mppColors[i]}" style="width:${(cnt/mppMax*100).toFixed(0)}%"></div>
+    </div>
+  `).join('');
+  $('#mppDivisiBar').html(mppHTML);
+}
+</script>
+</body>
+</html>
