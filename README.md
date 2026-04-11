@@ -1,59 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SCM HR Monitoring
+**PT Sulawesi Cahaya Mineral — SCM Division Konawe**
+**MPP-970 | Laravel 11 + MySQL + AdminLTE 3**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## 📁 Struktur Modul
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Modul | Deskripsi |
+|---|---|
+| Dashboard | Overview KPI, chart rekrutmen, karyawan, MPP |
+| Rekrutmen | CRUD kandidat + Pipeline Kanban + filter lengkap |
+| Karyawan | CRUD Staff & Non-Staff OL + filter |
+| MPP Planning | CRUD posisi MPP + monitoring per bulan |
+| Gap Analysis | Perbandingan MPP vs karyawan aktif per divisi |
+| Master Data | Divisi, Departemen, Jabatan |
+| User Management | CRUD user + role-based access |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ⚙️ Setup & Instalasi
 
-## Learning Laravel
+### 1. Clone / Extract project
+```bash
+cd /your/project/folder
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 2. Install dependencies
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Konfigurasi environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Laravel Sponsors
+### 4. Edit `.env` — sesuaikan database
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=scm_hr
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 5. Buat database MySQL
+```sql
+CREATE DATABASE scm_hr CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-### Premium Partners
+### 6. Jalankan migrasi dan seeder
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 7. Jalankan aplikasi
+```bash
+php artisan serve
+```
+Akses: **http://localhost:8000**
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔑 Default Login
 
-## Code of Conduct
+| Username | Password | Role |
+|---|---|---|
+| `admin` | `password123` | Administrator |
+| `hrmanager` | `password123` | HR Manager |
+| `hrstaff` | `password123` | HR Staff |
+| `viewer` | `password123` | Viewer |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📊 Data yang Di-seed dari Excel
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **76 kandidat** rekrutmen (data asli dari sheet `Recruitment`)
+- **Master data**: 23 divisi, 30+ departemen
+- **Sample karyawan** Staff & Non-Staff
+- **MPP positions** untuk tahun 2024, 2025, 2026
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🗄️ Struktur Database
+
+```
+users               — Auth + role management
+divisis             — Master divisi
+departemens         — Master departemen (FK → divisis)
+jabatans            — Master jabatan/posisi (FK → departemens)
+rekrutmens          — Data kandidat rekrutmen
+karyawans           — Data karyawan aktif OL
+mpp_positions       — Man Power Planning per tahun + per bulan
+activity_logs       — Audit trail semua perubahan
+```
+
+---
+
+## 🎨 Tech Stack
+
+- **Backend**: Laravel 11, PHP 8.2+
+- **Database**: MySQL 8
+- **Frontend**: AdminLTE 3, Bootstrap 4
+- **Tables**: Yajra DataTables (server-side)
+- **Charts**: Chart.js 3
+- **Select**: Select2
+- **Import**: Maatwebsite Excel (placeholder)
+
+---
+
+## 📦 Package yang Diperlukan
+
+```json
+"require": {
+    "laravel/framework": "^11.0",
+    "maatwebsite/excel": "^3.1",
+    "yajra/laravel-datatables-oracle": "^11.0"
+}
+```
+
+---
+
+## 🔒 Role & Access
+
+| Role | Dashboard | Rekrutmen | Karyawan | MPP | Master | Users |
+|---|---|---|---|---|---|---|
+| admin | ✅ | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD |
+| hr_manager | ✅ | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD | ❌ |
+| hr_staff | ✅ | ✅ CRUD | ✅ CRUD | ✅ CRUD | ✅ CRUD | ❌ |
+| viewer | ✅ | 👁️ View | 👁️ View | 👁️ View | ❌ | ❌ |
+
+---
+
+## 🚀 Fitur Utama
+
+1. **Dashboard** — KPI cards, chart donut status, bar chart per bulan, progress per divisi
+2. **Filter Rekrutmen** — Tahun, Bulan, Progress, Level, Divisi, Priority, Sumber, Gender, Search
+3. **Pipeline View** — Kanban board 3 kolom (Compro / On Board / Failed)
+4. **DataTables Server-side** — Semua tabel dengan sorting, paging, search
+5. **Gap Analysis** — Visualisasi MPP vs karyawan aktif per divisi + chart
+6. **Audit Log** — Semua aksi CRUD tercatat di `activity_logs`
+7. **Master Data** — CRUD Divisi / Departemen / Jabatan via AJAX modal
+
+---
+
+## 📋 TODO / Next Development
+
+- [ ] Import Excel (Maatwebsite implementation)
+- [ ] Export Excel per modul
+- [ ] Print/PDF Offering Letter
+- [ ] Notifikasi email SLA expired
+- [ ] History log per kandidat rekrutmen
+- [ ] Mobile responsive improvement
