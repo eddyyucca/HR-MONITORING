@@ -214,16 +214,97 @@
   }
   .table-hover tbody tr:hover { background: #f8fafc; }
 
-  /* ── Filter bar ── */
-  .filter-bar {
-    background: #fff; border-radius: var(--radius);
-    padding: .65rem 1rem;
-    display: flex; align-items: center; gap: .65rem; flex-wrap: wrap;
-    box-shadow: var(--card-sh); margin-bottom: 1.1rem;
-    font-size: .78rem;
+  /* ── Form Controls (normalize all sizes) ── */
+  .form-control,
+  .form-control-sm {
+    height: 34px;
+    padding: .3rem .7rem;
+    font-size: .82rem;
+    border-radius: .4rem;
+    border: 1px solid #e2e8f0;
+    color: #374151;
+    background-color: #fff;
+    transition: border-color .15s, box-shadow .15s;
+    line-height: 1.5;
   }
-  .filter-bar label  { font-size: .72rem; font-weight: 600; color: #64748b; margin: 0; }
-  .filter-bar .form-control-sm { border-radius: .4rem; border-color: #e2e8f0; font-size: .78rem; }
+  textarea.form-control,
+  textarea.form-control-sm { height: auto; min-height: 68px; resize: vertical; }
+  .form-control:focus,
+  .form-control-sm:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67,97,238,.12);
+    outline: none;
+  }
+  .form-control.is-invalid,
+  .form-control-sm.is-invalid { border-color: var(--danger); }
+  .invalid-feedback { font-size: .72rem; }
+
+  .form-group { margin-bottom: .85rem; }
+  .form-group > label {
+    font-size: .72rem; font-weight: 600; color: #475569;
+    margin-bottom: .28rem; display: block; line-height: 1.4;
+  }
+
+  /* ── Select2 overrides ── */
+  .select2-container { width: 100% !important; }
+  .select2-container--bootstrap4 .select2-selection--single {
+    height: 34px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: .4rem !important;
+    background: #fff !important;
+  }
+  .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    line-height: 32px !important;
+    padding: 0 .7rem !important;
+    font-size: .82rem !important;
+    color: #374151 !important;
+  }
+  .select2-container--bootstrap4 .select2-selection--single .select2-selection__placeholder {
+    color: #adb5bd !important;
+  }
+  .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    height: 34px !important; top: 0 !important;
+  }
+  .select2-container--bootstrap4.select2-container--focus .select2-selection--single,
+  .select2-container--bootstrap4.select2-container--open .select2-selection--single {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(67,97,238,.12) !important;
+  }
+  .select2-container--bootstrap4 .select2-dropdown {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: .4rem !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,.1) !important;
+    font-size: .82rem !important;
+  }
+  .select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
+    border-radius: .35rem; border-color: #e2e8f0; font-size: .8rem; padding: .3rem .5rem;
+  }
+  .select2-container--bootstrap4 .select2-results__option {
+    padding: .35rem .7rem; font-size: .82rem;
+  }
+  .select2-container--bootstrap4 .select2-results__option--highlighted {
+    background: var(--primary) !important;
+  }
+  .select2-container--bootstrap4 .select2-results__option[aria-selected="true"] {
+    background: rgba(67,97,238,.08) !important; color: var(--primary) !important;
+  }
+  .select2-search--dropdown { padding: .4rem; }
+
+  /* ── Filter bar & filter card (index pages) ── */
+  .filter-bar, .filter-card {
+    background: #fff; border-radius: var(--radius);
+    padding: .85rem 1rem .2rem;
+    box-shadow: var(--card-sh); margin-bottom: 1.1rem;
+    border-left: 3px solid var(--primary);
+  }
+  .filter-card-header {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .8px; color: #94a3b8; margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .filter-bar label, .filter-card label {
+    font-size: .72rem; font-weight: 600; color: #475569; margin-bottom: .28rem;
+  }
 
   /* ── Progress ── */
   .progress       { border-radius: 10px !important; overflow: hidden; }
@@ -281,7 +362,7 @@
     </li>
     <li class="nav-item d-none d-sm-inline-block">
       <span class="nav-link" style="font-size:.8rem;color:#94a3b8;cursor:default;padding-left:0">
-        <i class="fas fa-hard-hat mr-1" style="color:#f59e0b"></i>
+        <!-- <i class="fas fa-hard-hat mr-1" style="color:#f59e0b"></i> -->
         <strong style="color:#1e293b">SCM HR Monitoring</strong>
         <span class="text-muted"> — Konawe</span>
       </span>
@@ -331,7 +412,7 @@
   <a href="{{ route('dashboard') }}" class="brand-link text-decoration-none d-flex align-items-center">
     <span class="d-inline-flex align-items-center justify-content-center mr-2"
           style="width:30px;height:30px;background:linear-gradient(135deg,#4361ee,#3a0ca3);border-radius:.4rem;flex-shrink:0">
-      <i class="fas fa-hard-hat text-white" style="font-size:.75rem"></i>
+      <!-- <i class="fas fa-hard-hat text-white" style="font-size:.75rem"></i> -->
     </span>
     <span class="brand-text font-weight-700" style="font-size:.83rem;letter-spacing:.2px">SCM HR Monitoring</span>
   </a>
@@ -492,13 +573,26 @@ function confirmDelete(id, url) {
   });
 }
 
-$(function () {
-  // Init Select2 only on elements not already initialized
-  $('.select2bs4').each(function () {
-    if (!$(this).hasClass('select2-hidden-accessible')) {
-      $(this).select2({ theme: 'bootstrap4', allowClear: true, placeholder: '-- Pilih --' });
-    }
+// Global Select2 init — semua <select> otomatis dapat search, kecuali .no-select2
+window.s2init = function (el) {
+  const $el = $(el);
+  if ($el.hasClass('select2-hidden-accessible')) $el.select2('destroy');
+  $el.select2({
+    theme: 'bootstrap4',
+    allowClear: true,
+    placeholder: $el.data('placeholder') || '-- Pilih --',
+    width: '100%',
   });
+};
+
+window.initAllSelect2 = function (scope) {
+  (scope ? $(scope).find('select') : $('select:not(.no-select2)')).each(function () {
+    if (!$(this).hasClass('select2-hidden-accessible')) s2init(this);
+  });
+};
+
+$(function () {
+  initAllSelect2();
   setTimeout(() => $('.alert-success, .alert-info').fadeOut('slow'), 4000);
 });
 </script>

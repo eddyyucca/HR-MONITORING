@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title','Monitoring Rekrutmen')
-@section('page-title','<i class="fas fa-search mr-2 text-primary"></i>Monitoring Rekrutmen')
+@section('page-title')
+  <i class="fas fa-search text-primary"></i> Monitoring Rekrutmen
+@endsection
 @section('breadcrumb')
   <li class="breadcrumb-item active">Rekrutmen</li>
 @endsection
@@ -16,7 +18,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Tahun</label>
-          <select id="fYear" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fYear" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             @foreach($years as $y)<option value="{{ $y }}" {{ ($filters['year'] ?? '') == $y ? 'selected':'' }}>{{ $y }}</option>@endforeach
           </select>
@@ -25,7 +27,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Bulan</label>
-          <select id="fMonth" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fMonth" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             @foreach([1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Agustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'] as $n=>$m)
               <option value="{{ $n }}" {{ ($filters['month'] ?? '') == $n ? 'selected':'' }}>{{ $m }}</option>
@@ -36,7 +38,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Progress</label>
-          <select id="fProgress" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fProgress" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             <option value="Compro" {{ ($filters['progress'] ?? '') == 'Compro' ? 'selected':'' }}>Compro</option>
             <option value="On Board" {{ ($filters['progress'] ?? '') == 'On Board' ? 'selected':'' }}>On Board</option>
@@ -49,7 +51,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Level</label>
-          <select id="fLevel" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fLevel" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             <option value="Non-Staff">Non-Staff</option>
             <option value="Officer">Officer</option>
@@ -62,7 +64,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Divisi</label>
-          <select id="fDivisi" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fDivisi" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             @foreach($divisis as $d)<option value="{{ $d->id }}" {{ ($filters['divisi_id'] ?? '') == $d->id ? 'selected':'' }}>{{ $d->nama }}</option>@endforeach
           </select>
@@ -71,7 +73,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Priority</label>
-          <select id="fPriority" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fPriority" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             <option value="P1">P1 - Utama</option>
             <option value="P2">P2 - Sedang</option>
@@ -85,7 +87,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Sumber</label>
-          <select id="fSourch" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fSourch" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             <option value="Referral">Referral</option>
             <option value="BSI">BSI</option>
@@ -97,7 +99,7 @@
       <div class="col-md-2 col-sm-6">
         <div class="form-group">
           <label>Gender</label>
-          <select id="fGender" class="form-control form-control-sm select2bs4" style="width:100%">
+          <select id="fGender" class="form-control" data-placeholder="-- Semua --">
             <option value="">-- Semua --</option>
             <option value="Male">Laki-laki</option>
             <option value="Female">Perempuan</option>
@@ -107,7 +109,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <label>Cari Nama / Posisi</label>
-          <input type="text" id="fSearch" class="form-control form-control-sm" placeholder="Ketik nama atau posisi...">
+          <input type="text" id="fSearch" class="form-control" placeholder="Ketik nama atau posisi...">
         </div>
       </div>
       <div class="col-md-2 d-flex align-items-end">
@@ -329,7 +331,6 @@ function loadKanban() {
 }
 
 $(document).ready(function() {
-  $('.select2bs4').select2({theme:'bootstrap4',allowClear:true,placeholder:'-- Semua --'});
   initTable();
   $('#fYear,#fMonth,#fProgress,#fLevel,#fDivisi,#fPriority,#fSourch,#fGender').on('change', reloadTable);
   let searchTimer;

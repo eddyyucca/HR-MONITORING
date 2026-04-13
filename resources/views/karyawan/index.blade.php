@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title','Data Karyawan')
-@section('page-title','<i class="fas fa-users mr-2 text-primary"></i>Data Karyawan OL')
+@section('page-title')
+  <i class="fas fa-users text-primary"></i> Data Karyawan OL
+@endsection
 @section('breadcrumb')<li class="breadcrumb-item active">Karyawan</li>@endsection
 
 @section('content')
@@ -53,7 +55,7 @@
     <div class="col-md-2 col-sm-6">
       <div class="form-group">
         <label>Tipe</label>
-        <select id="fTipe" class="form-control form-control-sm select2bs4" style="width:100%">
+        <select id="fTipe" class="form-control" data-placeholder="-- Semua --">
           <option value="">-- Semua --</option>
           <option value="Staff" {{ ($filters['tipe'] ?? '') == 'Staff' ? 'selected' : '' }}>Staff</option>
           <option value="Non-Staff" {{ ($filters['tipe'] ?? '') == 'Non-Staff' ? 'selected' : '' }}>Non-Staff</option>
@@ -63,7 +65,7 @@
     <div class="col-md-2 col-sm-6">
       <div class="form-group">
         <label>Status</label>
-        <select id="fStatus" class="form-control form-control-sm select2bs4" style="width:100%">
+        <select id="fStatus" class="form-control" data-placeholder="-- Semua --">
           <option value="">-- Semua --</option>
           <option value="Kontrak">Kontrak</option>
           <option value="Percobaan">Probation</option>
@@ -74,7 +76,7 @@
     <div class="col-md-2 col-sm-6">
       <div class="form-group">
         <label>Divisi</label>
-        <select id="fDivisi" class="form-control form-control-sm select2bs4" style="width:100%">
+        <select id="fDivisi" class="form-control" data-placeholder="-- Semua Divisi --">
           <option value="">-- Semua --</option>
           @foreach($divisis as $d)<option value="{{ $d->id }}">{{ $d->nama }}</option>@endforeach
         </select>
@@ -83,7 +85,7 @@
     <div class="col-md-2 col-sm-6">
       <div class="form-group">
         <label>Level</label>
-        <select id="fLevel" class="form-control form-control-sm select2bs4" style="width:100%">
+        <select id="fLevel" class="form-control" data-placeholder="-- Semua Level --">
           <option value="">-- Semua --</option>
           <option value="Assistant Manager">Assistant Manager</option>
           <option value="Supervisor">Supervisor</option>
@@ -95,7 +97,7 @@
     <div class="col-md-2 col-sm-6">
       <div class="form-group">
         <label>Cari Nama/Posisi</label>
-        <input type="text" id="fSearch" class="form-control form-control-sm" placeholder="Cari...">
+        <input type="text" id="fSearch" class="form-control" placeholder="Cari...">
       </div>
     </div>
     <div class="col-md-2 d-flex align-items-end">

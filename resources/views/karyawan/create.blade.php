@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title','Tambah Karyawan')
-@section('page-title','<i class="fas fa-user-plus mr-2 text-primary"></i>Tambah Data Karyawan OL')
+@section('page-title')
+  <i class="fas fa-user-plus text-primary"></i> Tambah Data Karyawan OL
+@endsection
 @section('breadcrumb')
   <li class="breadcrumb-item"><a href="{{ route('karyawan.index') }}">Karyawan</a></li>
   <li class="breadcrumb-item active">Tambah</li>
@@ -12,13 +14,13 @@
   <div class="row">
     <div class="col-md-6">
       <div class="card card-outline card-primary">
-        <div class="card-header card-header-sm"><h3 class="card-title">Identitas Karyawan</h3></div>
+        <div class="card-header"><h3 class="card-title"><i class="fas fa-id-card text-primary"></i> Identitas Karyawan</h3></div>
         <div class="card-body">
           <div class="row">
             <div class="col-3">
               <div class="form-group">
                 <label>Sapaan</label>
-                <select name="salutation" class="form-control form-control-sm">
+                <select name="salutation" class="form-control" data-placeholder="--">
                   <option value="">--</option>
                   <option value="Mr." {{ old('salutation')=='Mr.'?'selected':'' }}>Mr.</option>
                   <option value="Mrs." {{ old('salutation')=='Mrs.'?'selected':'' }}>Mrs.</option>
@@ -39,49 +41,49 @@
             <div class="col-6">
               <div class="form-group">
                 <label>No. Karyawan</label>
-                <input type="text" name="no_karyawan" class="form-control form-control-sm" value="{{ old('no_karyawan') }}" placeholder="Optional">
+                <input type="text" name="no_karyawan" class="form-control" value="{{ old('no_karyawan') }}" placeholder="Optional">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>No. Telepon</label>
-                <input type="text" name="no_telp" class="form-control form-control-sm" value="{{ old('no_telp') }}">
+                <input type="text" name="no_telp" class="form-control" value="{{ old('no_telp') }}">
               </div>
             </div>
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" class="form-control form-control-sm" value="{{ old('email') }}">
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
           </div>
           <div class="form-group">
             <label>Alamat</label>
-            <textarea name="alamat" class="form-control form-control-sm" rows="2">{{ old('alamat') }}</textarea>
+            <textarea name="alamat" class="form-control" rows="2">{{ old('alamat') }}</textarea>
           </div>
           <div class="form-group">
             <label>Perusahaan</label>
-            <input type="text" name="company" class="form-control form-control-sm" value="{{ old('company','PT Sulawesi Cahaya Mineral') }}">
+            <input type="text" name="company" class="form-control" value="{{ old('company','PT Sulawesi Cahaya Mineral') }}">
           </div>
         </div>
       </div>
 
       <div class="card card-outline card-warning">
-        <div class="card-header card-header-sm"><h3 class="card-title">Gaji & Tunjangan</h3></div>
+        <div class="card-header"><h3 class="card-title"><i class="fas fa-dollar-sign text-warning"></i> Gaji & Tunjangan</h3></div>
         <div class="card-body">
           <div class="form-group">
             <label>Gaji Pokok (Rp)</label>
-            <input type="number" name="basic_salary" class="form-control form-control-sm" value="{{ old('basic_salary') }}" min="0" step="1000">
+            <input type="number" name="basic_salary" class="form-control" value="{{ old('basic_salary') }}" min="0" step="1000">
           </div>
           <div class="row">
             <div class="col-6">
               <div class="form-group">
                 <label>Weeks On</label>
-                <input type="number" name="weeks_on" class="form-control form-control-sm" value="{{ old('weeks_on') }}" min="0">
+                <input type="number" name="weeks_on" class="form-control" value="{{ old('weeks_on') }}" min="0">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>Weeks Off</label>
-                <input type="number" name="weeks_off" class="form-control form-control-sm" value="{{ old('weeks_off') }}" min="0">
+                <input type="number" name="weeks_off" class="form-control" value="{{ old('weeks_off') }}" min="0">
               </div>
             </div>
           </div>
@@ -89,41 +91,41 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Inpatient Local</label>
-                <input type="number" name="inpatient_local" class="form-control form-control-sm" value="{{ old('inpatient_local') }}" min="0">
+                <input type="number" name="inpatient_local" class="form-control" value="{{ old('inpatient_local') }}" min="0">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>Inpatient Interlokal</label>
-                <input type="number" name="inpatient_interlokal" class="form-control form-control-sm" value="{{ old('inpatient_interlokal') }}" min="0">
+                <input type="number" name="inpatient_interlokal" class="form-control" value="{{ old('inpatient_interlokal') }}" min="0">
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-4"><div class="form-group">
               <label>Outpatient</label>
-              <input type="number" name="outpatient" class="form-control form-control-sm" value="{{ old('outpatient') }}" min="0">
+              <input type="number" name="outpatient" class="form-control" value="{{ old('outpatient') }}" min="0">
             </div></div>
             <div class="col-4"><div class="form-group">
               <label>Frames</label>
-              <input type="number" name="frames" class="form-control form-control-sm" value="{{ old('frames') }}" min="0">
+              <input type="number" name="frames" class="form-control" value="{{ old('frames') }}" min="0">
             </div></div>
             <div class="col-4"><div class="form-group">
               <label>Lens</label>
-              <input type="number" name="lens" class="form-control form-control-sm" value="{{ old('lens') }}" min="0">
+              <input type="number" name="lens" class="form-control" value="{{ old('lens') }}" min="0">
             </div></div>
           </div>
           <div class="row">
             <div class="col-6">
               <div class="form-group">
                 <label>Nama Penandatangan</label>
-                <input type="text" name="signature_name" class="form-control form-control-sm" value="{{ old('signature_name','Endah Carolina') }}">
+                <input type="text" name="signature_name" class="form-control" value="{{ old('signature_name','Endah Carolina') }}">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>Jabatan Penandatangan</label>
-                <input type="text" name="signature_title" class="form-control form-control-sm" value="{{ old('signature_title','HRGA Manager') }}">
+                <input type="text" name="signature_title" class="form-control" value="{{ old('signature_title','HRGA Manager') }}">
               </div>
             </div>
           </div>
@@ -133,7 +135,7 @@
 
     <div class="col-md-6">
       <div class="card card-outline card-info">
-        <div class="card-header card-header-sm"><h3 class="card-title">Posisi & Penempatan</h3></div>
+        <div class="card-header"><h3 class="card-title"><i class="fas fa-briefcase text-info"></i> Posisi & Penempatan</h3></div>
         <div class="card-body">
           <div class="form-group">
             <label>Posisi / Job Title <span class="text-danger">*</span></label>
@@ -143,7 +145,7 @@
           </div>
           <div class="form-group">
             <label>Divisi</label>
-            <select name="divisi_id" id="divisiSelect" class="form-control form-control-sm select2bs4" style="width:100%">
+            <select name="divisi_id" id="divisiSelect" class="form-control" data-placeholder="-- Pilih Divisi --">
               <option value="">-- Pilih Divisi --</option>
               @foreach($divisis as $d)
                 <option value="{{ $d->id }}" {{ old('divisi_id')==$d->id?'selected':'' }}>{{ $d->nama }}</option>
@@ -152,7 +154,7 @@
           </div>
           <div class="form-group">
             <label>Departemen</label>
-            <select name="departemen_id" id="deptSelect" class="form-control form-control-sm select2bs4" style="width:100%">
+            <select name="departemen_id" id="deptSelect" class="form-control" data-placeholder="-- Pilih Departemen --">
               <option value="">-- Pilih Departemen --</option>
               @foreach($departemens as $d)
                 <option value="{{ $d->id }}" {{ old('departemen_id')==$d->id?'selected':'' }}>{{ $d->nama }}</option>
@@ -163,7 +165,7 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Tipe <span class="text-danger">*</span></label>
-                <select name="tipe" class="form-control form-control-sm">
+                <select name="tipe" class="form-control" data-placeholder="-- Pilih --">
                   <option value="Staff" {{ old('tipe','Staff')=='Staff'?'selected':'' }}>Staff</option>
                   <option value="Non-Staff" {{ old('tipe')=='Non-Staff'?'selected':'' }}>Non-Staff</option>
                 </select>
@@ -172,7 +174,7 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Level</label>
-                <select name="level" class="form-control form-control-sm select2bs4" style="width:100%">
+                <select name="level" class="form-control" data-placeholder="-- Pilih Level --">
                   <option value="">-- Pilih --</option>
                   @foreach($levelOptions as $l)
                     <option value="{{ $l }}" {{ old('level')==$l?'selected':'' }}>{{ $l }}</option>
@@ -185,35 +187,35 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Grade</label>
-                <input type="number" name="grade" class="form-control form-control-sm" value="{{ old('grade') }}" min="1" max="20" placeholder="10-15">
+                <input type="number" name="grade" class="form-control" value="{{ old('grade') }}" min="1" max="20" placeholder="10-15">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>POH (Place of Hire)</label>
-                <input type="text" name="poh" class="form-control form-control-sm" value="{{ old('poh') }}">
+                <input type="text" name="poh" class="form-control" value="{{ old('poh') }}">
               </div>
             </div>
           </div>
           <div class="form-group">
             <label>Work Location</label>
-            <input type="text" name="work_location" class="form-control form-control-sm" value="{{ old('work_location','Konawe Site') }}">
+            <input type="text" name="work_location" class="form-control" value="{{ old('work_location','Konawe Site') }}">
           </div>
           <div class="form-group">
             <label>Level Direct Report</label>
-            <input type="text" name="level_direct_report" class="form-control form-control-sm" value="{{ old('level_direct_report') }}">
+            <input type="text" name="level_direct_report" class="form-control" value="{{ old('level_direct_report') }}">
           </div>
         </div>
       </div>
 
       <div class="card card-outline card-success">
-        <div class="card-header card-header-sm"><h3 class="card-title">Kontrak</h3></div>
+        <div class="card-header"><h3 class="card-title"><i class="fas fa-file-contract text-success"></i> Kontrak</h3></div>
         <div class="card-body">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
                 <label>Terms <span class="text-danger">*</span></label>
-                <select name="terms" class="form-control form-control-sm">
+                <select name="terms" class="form-control" data-placeholder="-- Pilih --">
                   <option value="PKWT" {{ old('terms','PKWT')=='PKWT'?'selected':'' }}>PKWT</option>
                   <option value="PKWTT" {{ old('terms')=='PKWTT'?'selected':'' }}>PKWTT</option>
                 </select>
@@ -222,7 +224,7 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Status <span class="text-danger">*</span></label>
-                <select name="status" class="form-control form-control-sm">
+                <select name="status" class="form-control" data-placeholder="-- Pilih --">
                   <option value="Kontrak" {{ old('status','Kontrak')=='Kontrak'?'selected':'' }}>Kontrak</option>
                   <option value="Percobaan" {{ old('status')=='Percobaan'?'selected':'' }}>Percobaan/Probation</option>
                   <option value="Tetap" {{ old('status')=='Tetap'?'selected':'' }}>Tetap</option>
@@ -235,13 +237,13 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Durasi (ID)</label>
-                <input type="text" name="durasi" class="form-control form-control-sm" value="{{ old('durasi') }}" placeholder="12 Bulan">
+                <input type="text" name="durasi" class="form-control" value="{{ old('durasi') }}" placeholder="12 Bulan">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>Durasi (EN)</label>
-                <input type="text" name="durasi_en" class="form-control form-control-sm" value="{{ old('durasi_en') }}" placeholder="12 Months">
+                <input type="text" name="durasi_en" class="form-control" value="{{ old('durasi_en') }}" placeholder="12 Months">
               </div>
             </div>
           </div>
@@ -249,13 +251,13 @@
             <div class="col-6">
               <div class="form-group">
                 <label>Tanggal OL / Join</label>
-                <input type="date" name="tgl_ol" class="form-control form-control-sm" value="{{ old('tgl_ol') }}">
+                <input type="date" name="tgl_ol" class="form-control" value="{{ old('tgl_ol') }}">
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
                 <label>Tgl Berakhir Kontrak</label>
-                <input type="date" name="tgl_berakhir" class="form-control form-control-sm" value="{{ old('tgl_berakhir') }}">
+                <input type="date" name="tgl_berakhir" class="form-control" value="{{ old('tgl_berakhir') }}">
               </div>
             </div>
           </div>
@@ -264,7 +266,7 @@
           @else
           <div class="form-group">
             <label>Dari Rekrutmen</label>
-            <select name="rekrutmen_id" class="form-control form-control-sm select2bs4" style="width:100%">
+            <select name="rekrutmen_id" class="form-control" data-placeholder="-- Pilih (opsional) --">
               <option value="">-- Pilih (opsional) --</option>
               @foreach($rekrutmens as $r)
                 <option value="{{ $r->id }}" {{ old('rekrutmen_id')==$r->id?'selected':'' }}>{{ $r->nama_lengkap }} — {{ $r->plan_job_title }}</option>
@@ -277,8 +279,8 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-end">
-    <a href="{{ route('karyawan.index') }}" class="btn btn-default btn-sm mr-2">
+  <div class="d-flex justify-content-end mt-2">
+    <a href="{{ route('karyawan.index') }}" class="btn btn-secondary btn-sm mr-2">
       <i class="fas fa-times mr-1"></i>Batal
     </a>
     <button type="submit" class="btn btn-primary btn-sm">
@@ -290,11 +292,13 @@
 
 @push('scripts')
 <script>
-$('#divisiSelect').on('change', function() {
-  $.get('/ajax/departemen-by-divisi/' + $(this).val(), function(data) {
-    var opts = '<option value="">-- Pilih Departemen --</option>';
+$('#divisiSelect').on('change', function () {
+  const id = $(this).val();
+  if (!id) return;
+  $.get('/ajax/departemen-by-divisi/' + id, function (data) {
+    let opts = '<option value="">-- Pilih Departemen --</option>';
     data.forEach(d => opts += `<option value="${d.id}">${d.nama}</option>`);
-    $('#deptSelect').html(opts).trigger('change');
+    s2init($('#deptSelect').html(opts)[0]);
   });
 });
 </script>

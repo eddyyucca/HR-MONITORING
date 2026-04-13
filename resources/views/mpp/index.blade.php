@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title','MPP Planning')
-@section('page-title','<i class="fas fa-clipboard-list mr-2 text-info"></i>Man Power Planning (MPP)')
+@section('page-title')
+  <i class="fas fa-clipboard-list text-info"></i> Man Power Planning (MPP)
+@endsection
 @section('breadcrumb')<li class="breadcrumb-item active">MPP Planning</li>@endsection
 
 @section('content')
@@ -43,27 +45,27 @@
   <div class="row">
     <div class="col-md-2"><div class="form-group">
       <label>Tahun</label>
-      <select id="fYear" class="form-control form-control-sm select2bs4" style="width:100%">
+      <select id="fYear" class="form-control" data-placeholder="-- Pilih Tahun --">
         @foreach($years as $y)<option value="{{ $y }}" {{ $y == $year ? 'selected':'' }}>{{ $y }}</option>@endforeach
       </select>
     </div></div>
     <div class="col-md-3"><div class="form-group">
       <label>Divisi</label>
-      <select id="fDivisi" class="form-control form-control-sm select2bs4" style="width:100%">
+      <select id="fDivisi" class="form-control" data-placeholder="-- Semua Divisi --">
         <option value="">-- Semua --</option>
         @foreach($divisis as $d)<option value="{{ $d->id }}">{{ $d->nama }}</option>@endforeach
       </select>
     </div></div>
     <div class="col-md-3"><div class="form-group">
       <label>Grade/Level</label>
-      <select id="fGrade" class="form-control form-control-sm select2bs4" style="width:100%">
+      <select id="fGrade" class="form-control" data-placeholder="-- Semua Grade --">
         <option value="">-- Semua --</option>
         @foreach(\App\Models\MppPosition::gradeOptions() as $g)<option value="{{ $g }}">{{ $g }}</option>@endforeach
       </select>
     </div></div>
     <div class="col-md-2"><div class="form-group">
       <label>Cari Posisi</label>
-      <input type="text" id="fSearch" class="form-control form-control-sm" placeholder="Cari...">
+      <input type="text" id="fSearch" class="form-control" placeholder="Cari...">
     </div></div>
     <div class="col-md-2 d-flex align-items-end"><div class="form-group w-100">
       <button onclick="dtMpp.ajax.reload()" class="btn btn-primary btn-sm btn-block"><i class="fas fa-search mr-1"></i>Cari</button>
